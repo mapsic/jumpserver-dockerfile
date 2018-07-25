@@ -1,0 +1,92 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql   
+    restart: always    
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: jumpserver
+      MYSQL_USER: jumpserver
+      MYSQL_PASSWORD: password
+    networks:
+      - jms_net
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:    
+    image: redis
+    container_name: redis    
+    restart: always
+    networks:
+      - jms_net
+
+  jumpserver:
+    image: mapsic/jumpserver:v1.3.3
+    container_name: jumpserver
+    depends_on:
+      - mysql
+      - redis
+    restart: always
+    environment:
+      DB_HOST: mysql
+      DB_USER: jumpserver
+      DB_PASSWORD: password
+      DB_NAME: jumpserver
+      REDIS_HOST: redis    
+    networks:
+      - jms_net
+    volumes:
+      - jms_data:/opt/jumpserver/data
+      - ./config.py:/opt/jumpserver/config.py
+  
+  coco:
+    image: mapsic/coco:v1.3.3
+    container_name: coco
+    depends_on:
+      - jumpserver
+    restart: always
+    ports:
+      - 2222:2222
+    networks:
+      - jms_net
+    volumes:
+      - conf.py:/opt/coco/conf.py
+
+  luna:
+    images: mapsic/nginx-luna:v1.3.3
+    container_name: nginx_luna
+    depends_on:
+      - jumpserver
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - jms_net
+    volumes:
+      - jms_data:/opt/jumpserver/data
+      - nginx.conf:/etc/nginx/nginx.conf
+
+  guacamole:
+    images: jumpserver/guacamole:latest
+    container_name: guacamole
+    depends_on:
+      - jumpserver
+    restart: always
+    environment:
+      JUMPSERVER_KEY_DIR: /config/guacamole/key
+      JUMPSERVER_SERVER: jumpserver:8080
+    networks:
+      - jms_net
+    volumes:
+      - guacamole_key_data:/opt/coco/conf.py
+
+volumes:
+  - db_data:
+  - jms_data:
+  - guacamole_key_data:
+
+networks:
+  - jms_net:
