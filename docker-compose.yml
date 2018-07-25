@@ -48,15 +48,17 @@ services:
     depends_on:
       - jumpserver
     restart: always
+    environment:
+      CORE_HOST: http://jumpserver:8080
     ports:
       - 2222:2222
     networks:
       - jms_net
     volumes:
-      - conf.py:/opt/coco/conf.py
+      - ./conf.py:/opt/coco/conf.py
 
   luna:
-    images: mapsic/nginx-luna:v1.3.3
+    image: mapsic/nginx-luna:v1.3.3
     container_name: nginx_luna
     depends_on:
       - jumpserver
@@ -67,26 +69,26 @@ services:
       - jms_net
     volumes:
       - jms_data:/opt/jumpserver/data
-      - nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf
 
   guacamole:
-    images: jumpserver/guacamole:latest
+    image: jumpserver/guacamole:latest
     container_name: guacamole
     depends_on:
       - jumpserver
     restart: always
     environment:
       JUMPSERVER_KEY_DIR: /config/guacamole/key
-      JUMPSERVER_SERVER: jumpserver:8080
+      JUMPSERVER_SERVER: http://jumpserver:8080
     networks:
       - jms_net
     volumes:
-      - guacamole_key_data:/opt/coco/conf.py
+      - guacamole_key_data:/config/guacamole/key
 
 volumes:
-  - db_data:
-  - jms_data:
-  - guacamole_key_data:
+  db_data:
+  jms_data:
+  guacamole_key_data:
 
 networks:
-  - jms_net:
+  jms_net:
