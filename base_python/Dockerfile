@@ -11,7 +11,7 @@ RUN localedef -c -f UTF-8 -i zh_CN zh_CN.UTF-8         \
     && echo "Asia/Shanghai" > /etc/timezone  \
     && yum -y install  wget unzip  xz gcc make automake zlib-devel openssl-devel epel-release sqlite-devel    \
     && rm -rf /var/cache/yum/*                         \
-    && wget http://jms-mapsic.oss-cn-hangzhou.aliyuncs.com/software/Python-${py_version}.tar.xz -O /opt/Python-${py_version}.tar.xz     \
+    && wget https://www.python.org/ftp/python/3.6.1/Python-${py_version}.tar.xz -O /opt/Python-${py_version}.tar.xz     \
     && tar xf Python-${py_version}.tar.xz                      \
     && cd Python-${py_version}                                 \
     && ./configure                                     \
