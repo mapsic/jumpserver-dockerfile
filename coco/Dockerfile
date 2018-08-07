@@ -1,6 +1,6 @@
 FROM mapsic/python:v3.6.1
 
-ENV coco_version=1.3.3
+ENV coco_version=1.4.0
  
 COPY run.sh /usr/local/bin/run.sh
 

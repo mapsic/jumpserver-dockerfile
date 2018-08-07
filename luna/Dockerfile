@@ -2,7 +2,7 @@ FROM centos:7
 
 WORKDIR /opt
 
-ENV luna_version 1.3.3
+ENV luna_version 1.4.0
 
 RUN yum -y install wget epel-release   \
     && yum -y install nginx            \

@@ -24,7 +24,7 @@ services:
       - jms_net
 
   jumpserver:
-    image: mapsic/jumpserver:v1.3.3
+    image: mapsic/jumpserver:v1.4.0
     container_name: jumpserver
     depends_on:
       - mysql
@@ -43,7 +43,7 @@ services:
       - ./config.py:/opt/jumpserver/config.py
   
   coco:
-    image: mapsic/coco:v1.3.3
+    image: mapsic/coco:v1.4.0
     container_name: coco
     depends_on:
       - jumpserver
@@ -58,7 +58,7 @@ services:
       - ./conf.py:/opt/coco/conf.py
 
   luna:
-    image: mapsic/nginx-luna:v1.3.3
+    image: mapsic/nginx-luna:v1.4.0
     container_name: nginx_luna
     depends_on:
       - jumpserver

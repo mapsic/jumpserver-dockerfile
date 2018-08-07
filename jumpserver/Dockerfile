@@ -1,6 +1,6 @@
 FROM mapsic/python:v3.6.1
 
-ENV jms_version=1.3.3
+ENV jms_version=1.4.0
 
 RUN source /opt/py3/bin/activate     \    
     && wget https://github.com/jumpserver/jumpserver/archive/${jms_version}.zip  -O /opt/jumpserver.zip  \                                  
